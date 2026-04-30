@@ -1,0 +1,8 @@
+bin/
+obj/
+Publish/
+logs/
+*.user
+*.suo
+*.pdb
+*.log

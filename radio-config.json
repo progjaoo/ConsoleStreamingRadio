@@ -1,0 +1,22 @@
+{
+  "Stream": {
+    "Url": "https://stm19.srvstm.com:7080/stream",
+    "AutoPlay": true,
+    "ReconnectEnabled": true,
+    "ReconnectDelaySeconds": 5
+  },
+  "Audio": {
+    "Backend": "Wasapi",
+    "OutputDeviceId": "",
+    "OutputDeviceName": "",
+    "WaveOutDeviceNumber": -1
+  },
+  "Service": {
+    "Name": "GTFRXTlink",
+    "DisplayName": "GTF RX Tlink",
+    "Description": "Radio stream receiver service"
+  },
+  "Console": {
+    "LicensedTo": "KBUM 102,7 FM"
+  }
+}
