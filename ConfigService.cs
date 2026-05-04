@@ -148,9 +148,15 @@ internal sealed class ConfigService
 
         config.Stream.Url = config.Stream.Url?.Trim() ?? string.Empty;
         config.Stream.ReconnectDelaySeconds = Math.Clamp(config.Stream.ReconnectDelaySeconds, 1, 300);
+        config.Stream.BufferSeconds = Math.Clamp(config.Stream.BufferSeconds, 3, 120);
+        config.Stream.PrebufferSeconds = Math.Clamp(config.Stream.PrebufferSeconds, 1, config.Stream.BufferSeconds);
+        config.Stream.BufferUnderrunFailSeconds = Math.Clamp(config.Stream.BufferUnderrunFailSeconds, 1, 60);
+        config.Stream.PrimaryRetrySeconds = Math.Clamp(config.Stream.PrimaryRetrySeconds, 5, 600);
+        config.Stream.LinkHealthTimeoutSeconds = Math.Clamp(config.Stream.LinkHealthTimeoutSeconds, 2, 60);
+        NormalizeTransmissionLinks(config.Stream);
 
         config.Audio.Backend = string.IsNullOrWhiteSpace(config.Audio.Backend)
-            ? "Wasapi"
+            ? "DirectSound"
             : config.Audio.Backend.Trim();
         config.Audio.OutputDeviceId = config.Audio.OutputDeviceId?.Trim() ?? string.Empty;
         config.Audio.OutputDeviceName = config.Audio.OutputDeviceName?.Trim() ?? string.Empty;
@@ -170,16 +176,33 @@ internal sealed class ConfigService
 
     private static void Validate(AppConfig config)
     {
-        if (!Uri.TryCreate(config.Stream.Url, UriKind.Absolute, out var uri)
-            || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        if (!IsValidStreamUrl(config.Stream.Url))
         {
             throw new InvalidOperationException("Stream.Url deve ser uma URL http ou https valida.");
         }
 
+        var enabledLinks = config.Stream.Links
+            .Where(link => link.Enabled && !string.IsNullOrWhiteSpace(link.Url))
+            .ToList();
+
+        if (enabledLinks.Count == 0)
+        {
+            throw new InvalidOperationException("Configure pelo menos um link de transmissao ativo.");
+        }
+
+        foreach (var link in enabledLinks)
+        {
+            if (!IsValidStreamUrl(link.Url))
+            {
+                throw new InvalidOperationException($"Link de transmissao invalido: {link.Name}.");
+            }
+        }
+
         if (!string.Equals(config.Audio.Backend, "Wasapi", StringComparison.OrdinalIgnoreCase)
+            && !string.Equals(config.Audio.Backend, "DirectSound", StringComparison.OrdinalIgnoreCase)
             && !string.Equals(config.Audio.Backend, "WaveOut", StringComparison.OrdinalIgnoreCase))
         {
-            throw new InvalidOperationException("Audio.Backend deve ser Wasapi ou WaveOut.");
+            throw new InvalidOperationException("Audio.Backend deve ser DirectSound, Wasapi ou WaveOut.");
         }
 
         if (string.IsNullOrWhiteSpace(config.Service.Name))
@@ -192,6 +215,60 @@ internal sealed class ConfigService
     {
         var json = JsonSerializer.Serialize(config, JsonOptions);
         File.WriteAllText(ConfigPath, json);
+    }
+
+    private static void NormalizeTransmissionLinks(StreamSettings stream)
+    {
+        stream.Links ??= [];
+
+        while (stream.Links.Count < 3)
+        {
+            var linkNumber = stream.Links.Count;
+            stream.Links.Add(new TransmissionLinkSettings
+            {
+                Name = linkNumber == 0 ? "Principal" : $"Reserva {linkNumber}",
+                Url = linkNumber == 0 ? stream.Url : string.Empty,
+                Enabled = linkNumber == 0
+            });
+        }
+
+        if (stream.Links.Count > 3)
+        {
+            stream.Links = stream.Links.Take(3).ToList();
+        }
+
+        for (var i = 0; i < stream.Links.Count; i++)
+        {
+            var link = stream.Links[i];
+            link.Name = string.IsNullOrWhiteSpace(link.Name)
+                ? i == 0 ? "Principal" : $"Reserva {i}"
+                : link.Name.Trim();
+            link.Url = link.Url?.Trim() ?? string.Empty;
+
+            if (i == 0)
+            {
+                link.Name = "Principal";
+
+                if (string.IsNullOrWhiteSpace(link.Url))
+                {
+                    link.Url = stream.Url;
+                }
+
+                link.Enabled = true;
+            }
+            else if (string.IsNullOrWhiteSpace(link.Url))
+            {
+                link.Enabled = false;
+            }
+        }
+
+        stream.Url = stream.Links[0].Url;
+    }
+
+    private static bool IsValidStreamUrl(string url)
+    {
+        return Uri.TryCreate(url, UriKind.Absolute, out var uri)
+            && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
     }
 
     private void EnsureDirectory()

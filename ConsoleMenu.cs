@@ -79,6 +79,18 @@ internal sealed class ConsoleMenu
                     Pause();
                     break;
 
+                case "12":
+                    ConfigureTransmissionLinks();
+                    break;
+
+                case "13":
+                    ExportLogs();
+                    break;
+
+                case "14":
+                    ConfigureBuffer();
+                    break;
+
                 case "0":
                     playerCts.Cancel();
                     await WaitForPlayerToStop(playerTask);
@@ -105,6 +117,8 @@ internal sealed class ConsoleMenu
         Console.WriteLine($"Software desenvolvido por GRUPO GTF e licenciado para: {config.Console.LicensedTo}");
         Console.WriteLine();
         Console.WriteLine($"Stream atual: {config.Stream.Url}");
+        Console.WriteLine($"Links ativos: {config.Stream.Links.Count(link => link.Enabled && !string.IsNullOrWhiteSpace(link.Url))}/3");
+        Console.WriteLine($"Buffer: {config.Stream.BufferSeconds}s (pre-buffer: {config.Stream.PrebufferSeconds}s)");
         Console.WriteLine($"Placa configurada: {FormatDeviceName(config.Audio)}");
         Console.WriteLine($"Configuracao: {Path.Combine(AppContext.BaseDirectory, ConfigService.DefaultFileName)}");
         Console.WriteLine();
@@ -133,6 +147,9 @@ internal sealed class ConsoleMenu
         Console.WriteLine("9  - Parar servico Windows");
         Console.WriteLine("10 - Reiniciar servico Windows");
         Console.WriteLine("11 - Remover servico Windows");
+        Console.WriteLine("12 - Configurar links de transmissao");
+        Console.WriteLine("13 - Exportar logs para TXT");
+        Console.WriteLine("14 - Configurar buffer de audio");
         Console.WriteLine("0  - Sair");
         Console.WriteLine();
         Console.Write("Opcao: ");
@@ -145,8 +162,10 @@ internal sealed class ConsoleMenu
         Console.WriteLine();
         Console.WriteLine($"Estado: {status.State}");
         Console.WriteLine($"Mensagem: {status.Message}");
+        Console.WriteLine($"Link: {status.LinkName ?? "-"}");
         Console.WriteLine($"Stream: {status.StreamUrl ?? "-"}");
         Console.WriteLine($"Audio: {status.AudioDeviceName ?? "-"}");
+        Console.WriteLine($"Buffer: {FormatBuffer(status.BufferDuration)}");
         Console.WriteLine($"Atualizado em: {status.Timestamp:yyyy-MM-dd HH:mm:ss}");
         Console.WriteLine($"Log: {AppLogger.LogPath}");
     }
@@ -205,9 +224,10 @@ internal sealed class ConsoleMenu
             config.Audio.OutputDeviceId = string.Empty;
             config.Audio.OutputDeviceName = string.Empty;
             config.Audio.WaveOutDeviceNumber = -1;
-            config.Audio.Backend = "Wasapi";
+            config.Audio.Backend = "DirectSound";
             _configService.Save(config);
             _player.RequestRestart();
+            AppLogger.Info("Saida de audio alterada para padrao do Windows.");
             Console.WriteLine("Saida padrao selecionada.");
             Pause();
             return;
@@ -228,6 +248,7 @@ internal sealed class ConsoleMenu
         config.Audio.WaveOutDeviceNumber = selectedDevice.WaveOutDeviceNumber;
         _configService.Save(config);
         _player.RequestRestart();
+        AppLogger.Info($"Saida de audio alterada para {selectedDevice.Name} ({selectedDevice.Backend}).");
 
         Console.WriteLine($"Placa selecionada: {selectedDevice.Name}");
         Pause();
@@ -238,8 +259,8 @@ internal sealed class ConsoleMenu
         var config = _configService.LoadOrCreate();
 
         Console.WriteLine();
-        Console.WriteLine($"URL atual: {config.Stream.Url}");
-        Console.Write("Nova URL: ");
+        Console.WriteLine($"URL principal atual: {config.Stream.Url}");
+        Console.Write("Nova URL principal: ");
         var newUrl = Console.ReadLine()?.Trim();
 
         if (string.IsNullOrWhiteSpace(newUrl))
@@ -251,11 +272,21 @@ internal sealed class ConsoleMenu
 
         config.Stream.Url = newUrl;
 
+        while (config.Stream.Links.Count < 3)
+        {
+            config.Stream.Links.Add(new TransmissionLinkSettings());
+        }
+
+        config.Stream.Links[0].Name = "Principal";
+        config.Stream.Links[0].Url = newUrl;
+        config.Stream.Links[0].Enabled = true;
+
         try
         {
             _configService.Save(config);
             _player.RequestRestart();
-            Console.WriteLine("URL atualizada e player reiniciado.");
+            AppLogger.Info($"URL principal alterada para {newUrl}.");
+            Console.WriteLine("URL principal atualizada e player reiniciado.");
         }
         catch (Exception ex)
         {
@@ -263,6 +294,139 @@ internal sealed class ConsoleMenu
         }
 
         Pause();
+    }
+
+    private void ConfigureTransmissionLinks()
+    {
+        var config = _configService.LoadOrCreate();
+
+        Console.WriteLine();
+        Console.WriteLine("Links de transmissao:");
+        PrintTransmissionLinks(config);
+        Console.WriteLine();
+        Console.Write("Escolha o link para alterar (1-3) ou 0 para voltar: ");
+        var input = Console.ReadLine();
+
+        if (!int.TryParse(input, out var selected) || selected < 0 || selected > 3)
+        {
+            Console.WriteLine("Opcao invalida.");
+            Pause();
+            return;
+        }
+
+        if (selected == 0)
+        {
+            return;
+        }
+
+        while (config.Stream.Links.Count < 3)
+        {
+            config.Stream.Links.Add(new TransmissionLinkSettings());
+        }
+
+        var index = selected - 1;
+        var link = config.Stream.Links[index];
+
+        Console.WriteLine();
+        Console.WriteLine($"Link selecionado: {(index == 0 ? "Principal" : $"Reserva {index}")}");
+        Console.WriteLine($"URL atual: {(string.IsNullOrWhiteSpace(link.Url) ? "-" : link.Url)}");
+        Console.Write("Nova URL (vazio desativa reservas): ");
+        var newUrl = Console.ReadLine()?.Trim() ?? string.Empty;
+
+        if (index == 0 && string.IsNullOrWhiteSpace(newUrl))
+        {
+            Console.WriteLine("O link principal nao pode ficar vazio.");
+            Pause();
+            return;
+        }
+
+        link.Name = index == 0 ? "Principal" : $"Reserva {index}";
+        link.Url = newUrl;
+        link.Enabled = index == 0 || !string.IsNullOrWhiteSpace(newUrl);
+
+        if (index == 0)
+        {
+            config.Stream.Url = newUrl;
+        }
+
+        try
+        {
+            _configService.Save(config);
+            _player.RequestRestart();
+            AppLogger.Info("Links de transmissao atualizados pelo console.");
+            Console.WriteLine("Links atualizados e player reiniciado.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Configuracao invalida: {ex.Message}");
+        }
+
+        Pause();
+    }
+
+    private static void PrintTransmissionLinks(AppConfig config)
+    {
+        for (var i = 0; i < config.Stream.Links.Count && i < 3; i++)
+        {
+            var link = config.Stream.Links[i];
+            var state = link.Enabled ? "ativo" : "desativado";
+            var url = string.IsNullOrWhiteSpace(link.Url) ? "-" : link.Url;
+            Console.WriteLine($"{i + 1}. {link.Name} [{state}] - {url}");
+        }
+    }
+
+    private static void ExportLogs()
+    {
+        var exportPath = AppLogger.ExportTextLog();
+        AppLogger.Info($"Logs exportados para TXT: {exportPath}");
+        Console.WriteLine();
+        Console.WriteLine($"Arquivo TXT de logs gerado em: {exportPath}");
+        Pause();
+    }
+
+    private void ConfigureBuffer()
+    {
+        var config = _configService.LoadOrCreate();
+
+        Console.WriteLine();
+        Console.WriteLine($"Buffer total atual: {config.Stream.BufferSeconds}s");
+        Console.WriteLine($"Pre-buffer atual: {config.Stream.PrebufferSeconds}s");
+        Console.Write("Novo buffer total em segundos (3-120): ");
+        var bufferInput = Console.ReadLine();
+        Console.Write("Novo pre-buffer em segundos (1 ate buffer total): ");
+        var prebufferInput = Console.ReadLine();
+
+        if (!int.TryParse(bufferInput, out var bufferSeconds)
+            || !int.TryParse(prebufferInput, out var prebufferSeconds))
+        {
+            Console.WriteLine("Valores invalidos.");
+            Pause();
+            return;
+        }
+
+        config.Stream.BufferSeconds = bufferSeconds;
+        config.Stream.PrebufferSeconds = prebufferSeconds;
+
+        try
+        {
+            _configService.Save(config);
+            _player.RequestRestart();
+            AppLogger.Info($"Buffer de audio alterado para {config.Stream.BufferSeconds}s com pre-buffer de {config.Stream.PrebufferSeconds}s.");
+            Console.WriteLine("Buffer atualizado e player reiniciado.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Configuracao invalida: {ex.Message}");
+        }
+
+        Pause();
+    }
+
+    private static string FormatBuffer(TimeSpan? bufferDuration)
+    {
+        return bufferDuration is null
+            ? "-"
+            : $"{bufferDuration.Value.TotalSeconds:0.0}s";
     }
 
     private static async Task WaitForPlayerToStop(Task playerTask)

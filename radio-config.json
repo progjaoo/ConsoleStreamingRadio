@@ -1,12 +1,34 @@
 {
   "Stream": {
     "Url": "https://stm19.srvstm.com:7080/stream",
+    "Links": [
+      {
+        "Name": "Principal",
+        "Url": "https://stm19.srvstm.com:7080/stream",
+        "Enabled": true
+      },
+      {
+        "Name": "Reserva 1",
+        "Url": "",
+        "Enabled": false
+      },
+      {
+        "Name": "Reserva 2",
+        "Url": "",
+        "Enabled": false
+      }
+    ],
     "AutoPlay": true,
     "ReconnectEnabled": true,
-    "ReconnectDelaySeconds": 5
+    "ReconnectDelaySeconds": 5,
+    "BufferSeconds": 20,
+    "PrebufferSeconds": 5,
+    "BufferUnderrunFailSeconds": 3,
+    "PrimaryRetrySeconds": 30,
+    "LinkHealthTimeoutSeconds": 5
   },
   "Audio": {
-    "Backend": "Wasapi",
+    "Backend": "DirectSound",
     "OutputDeviceId": "",
     "OutputDeviceName": "",
     "WaveOutDeviceNumber": -1

@@ -7,6 +7,7 @@ internal sealed class AudioDeviceService
     {
         var devices = new List<AudioDeviceInfo>();
 
+        AddDirectSoundDevices(devices);
         AddWasapiDevices(devices);
         AddWaveOutDevices(devices);
 
@@ -15,7 +16,12 @@ internal sealed class AudioDeviceService
 
     public IWavePlayer CreateOutput(AudioSettings settings)
     {
-        var backend = settings.Backend?.Trim() ?? "Wasapi";
+        var backend = settings.Backend?.Trim() ?? "DirectSound";
+
+        if (string.Equals(backend, "DirectSound", StringComparison.OrdinalIgnoreCase))
+        {
+            return CreateDirectSound(settings);
+        }
 
         if (string.Equals(backend, "WaveOut", StringComparison.OrdinalIgnoreCase))
         {
@@ -28,8 +34,8 @@ internal sealed class AudioDeviceService
         }
         catch (Exception ex) when (ex is InvalidOperationException or NotSupportedException or DllNotFoundException)
         {
-            AppLogger.Error($"Falha ao abrir saida WASAPI. Usando WaveOut padrao. Detalhe: {ex.Message}");
-            return CreateWaveOut(new AudioSettings());
+            AppLogger.Error($"Falha ao abrir saida WASAPI. Usando DirectSound padrao. Detalhe: {ex.Message}");
+            return CreateDirectSound(new AudioSettings());
         }
     }
 
@@ -44,6 +50,31 @@ internal sealed class AudioDeviceService
         }
 
         return devices[zeroBasedIndex];
+    }
+
+    private static void AddDirectSoundDevices(ICollection<AudioDeviceInfo> devices)
+    {
+        try
+        {
+            foreach (var device in DirectSoundOut.Devices)
+            {
+                var id = device.Guid.ToString("D");
+                var name = string.IsNullOrWhiteSpace(device.ModuleName)
+                    ? device.Description
+                    : $"{device.Description} ({device.ModuleName})";
+
+                devices.Add(new AudioDeviceInfo(
+                    "DirectSound",
+                    id,
+                    name,
+                    device.Guid == DirectSoundOut.DSDEVID_DefaultPlayback,
+                    -1));
+            }
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or NotSupportedException or DllNotFoundException)
+        {
+            AppLogger.Error($"Listagem DirectSound indisponivel neste ambiente: {ex.Message}");
+        }
     }
 
     private static void AddWasapiDevices(ICollection<AudioDeviceInfo> devices)
@@ -113,6 +144,19 @@ internal sealed class AudioDeviceService
         }
 
         return enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+    }
+
+    private static IWavePlayer CreateDirectSound(AudioSettings settings)
+    {
+        if (!string.IsNullOrWhiteSpace(settings.OutputDeviceId)
+            && Guid.TryParse(settings.OutputDeviceId, out var deviceGuid))
+        {
+            AppLogger.Info($"Saida de audio: {settings.OutputDeviceName} (DirectSound)");
+            return new DirectSoundOut(deviceGuid, 200);
+        }
+
+        AppLogger.Info("Saida de audio: padrao do Windows (DirectSound)");
+        return new DirectSoundOut(200);
     }
 
     private static IWavePlayer CreateWaveOut(AudioSettings settings)

@@ -49,6 +49,11 @@ internal static class Program
                 AdminActions.OpenConfig(configService.ConfigPath);
                 return 0;
 
+            case "--export-logs":
+                AppLogger.ConsoleEnabled = true;
+                Console.WriteLine($"Arquivo TXT de logs gerado em: {AppLogger.ExportTextLog()}");
+                return 0;
+
             case "--install-service":
                 AppLogger.ConsoleEnabled = true;
                 return WindowsServiceCommands.Install(configService.LoadOrCreate());
@@ -141,6 +146,7 @@ internal static class Program
         Console.WriteLine("  --service           Entrada usada pelo Windows Service");
         Console.WriteLine("  --list-devices      Lista placas de audio de saida");
         Console.WriteLine("  --open-config       Abre o arquivo de configuracao");
+        Console.WriteLine("  --export-logs       Gera um arquivo TXT com os logs atuais");
         Console.WriteLine("  --install-service   Instala o servico Windows");
         Console.WriteLine("  --uninstall-service Remove o servico Windows");
         Console.WriteLine("  --start-service     Inicia o servico Windows");

@@ -16,11 +16,37 @@ internal sealed class AppConfig
                 Url = "https://stm19.srvstm.com:7080/stream",
                 AutoPlay = true,
                 ReconnectEnabled = true,
-                ReconnectDelaySeconds = 5
+                ReconnectDelaySeconds = 5,
+                BufferSeconds = 20,
+                PrebufferSeconds = 5,
+                BufferUnderrunFailSeconds = 3,
+                PrimaryRetrySeconds = 30,
+                LinkHealthTimeoutSeconds = 5,
+                Links =
+                [
+                    new TransmissionLinkSettings
+                    {
+                        Name = "Principal",
+                        Url = "https://stm19.srvstm.com:7080/stream",
+                        Enabled = true
+                    },
+                    new TransmissionLinkSettings
+                    {
+                        Name = "Reserva 1",
+                        Url = string.Empty,
+                        Enabled = false
+                    },
+                    new TransmissionLinkSettings
+                    {
+                        Name = "Reserva 2",
+                        Url = string.Empty,
+                        Enabled = false
+                    }
+                ]
             },
             Audio = new AudioSettings
             {
-                Backend = "Wasapi",
+                Backend = "DirectSound",
                 OutputDeviceId = string.Empty,
                 OutputDeviceName = string.Empty,
                 WaveOutDeviceNumber = -1
@@ -48,14 +74,27 @@ internal sealed class AppConfig
 internal sealed class StreamSettings
 {
     public string Url { get; set; } = string.Empty;
+    public List<TransmissionLinkSettings> Links { get; set; } = [];
     public bool AutoPlay { get; set; } = true;
     public bool ReconnectEnabled { get; set; } = true;
     public int ReconnectDelaySeconds { get; set; } = 5;
+    public int BufferSeconds { get; set; } = 20;
+    public int PrebufferSeconds { get; set; } = 5;
+    public int BufferUnderrunFailSeconds { get; set; } = 3;
+    public int PrimaryRetrySeconds { get; set; } = 30;
+    public int LinkHealthTimeoutSeconds { get; set; } = 5;
+}
+
+internal sealed class TransmissionLinkSettings
+{
+    public string Name { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
+    public bool Enabled { get; set; } = true;
 }
 
 internal sealed class AudioSettings
 {
-    public string Backend { get; set; } = "Wasapi";
+    public string Backend { get; set; } = "DirectSound";
     public string OutputDeviceId { get; set; } = string.Empty;
     public string OutputDeviceName { get; set; } = string.Empty;
     public int WaveOutDeviceNumber { get; set; } = -1;

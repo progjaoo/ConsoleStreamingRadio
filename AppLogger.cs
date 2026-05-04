@@ -7,6 +7,29 @@ internal static class AppLogger
     public static string LogDirectory => Path.Combine(AppContext.BaseDirectory, "logs");
     public static string LogPath => Path.Combine(LogDirectory, "radio-stream-player.log");
 
+    public static string ExportTextLog()
+    {
+        lock (Sync)
+        {
+            Directory.CreateDirectory(LogDirectory);
+
+            var exportPath = Path.Combine(
+                LogDirectory,
+                $"radio-stream-player-export-{DateTime.Now:yyyyMMdd-HHmmss}.txt");
+
+            if (File.Exists(LogPath))
+            {
+                File.Copy(LogPath, exportPath, overwrite: true);
+            }
+            else
+            {
+                File.WriteAllText(exportPath, "Nenhum log registrado ate o momento." + Environment.NewLine);
+            }
+
+            return exportPath;
+        }
+    }
+
     public static void Info(string message)
     {
         Write("INFO", message);
