@@ -142,11 +142,11 @@ internal sealed class ConsoleMenu
         Console.WriteLine("4  - Alterar URL do stream");
         Console.WriteLine("5  - Abrir arquivo de configuracao");
         Console.WriteLine("6  - Reiniciar player local");
-        Console.WriteLine("7  - Instalar servico Windows");
-        Console.WriteLine("8  - Iniciar servico Windows");
-        Console.WriteLine("9  - Parar servico Windows");
-        Console.WriteLine("10 - Reiniciar servico Windows");
-        Console.WriteLine("11 - Remover servico Windows");
+        Console.WriteLine("7  - Instalar servico Windows (WinSW)");
+        Console.WriteLine("8  - Iniciar servico Windows (WinSW)");
+        Console.WriteLine("9  - Parar servico Windows (WinSW)");
+        Console.WriteLine("10 - Reiniciar servico Windows (WinSW)");
+        Console.WriteLine("11 - Remover servico Windows (WinSW)");
         Console.WriteLine("12 - Configurar links de transmissao");
         Console.WriteLine("13 - Exportar logs para TXT");
         Console.WriteLine("14 - Configurar buffer de audio");

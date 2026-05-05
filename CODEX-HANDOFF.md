@@ -53,7 +53,9 @@ GTF-RX-Tlink-Service.exe
 GTF-RX-Tlink-Service.xml
 ```
 
-O `.exe` e o WinSW renomeado. O `.xml` esta em `winsw/GTF-RX-Tlink-Service.xml`.
+O build/publish copia o XML e gera `GTF-RX-Tlink-Service.exe` automaticamente a
+partir do executavel do pacote WinSW. O `.xml` fonte esta em
+`winsw/GTF-RX-Tlink-Service.xml`.
 
 Instalar:
 
@@ -67,6 +69,9 @@ Instalar:
 - O app toca audio em console, mas servico Windows pode ter limitacoes de sessao.
 - Se nao sair audio como servico, configurar conta do servico para um usuario local com acesso a placa.
 - O XML do WinSW chama o app com `--run`.
+- Quando `GTF-RX-Tlink-Service.exe` existe ao lado do app, os comandos
+  `--install-service`, `--start-service`, `--stop-service`, `--restart-service`,
+  `--uninstall-service` e `--status-service` usam WinSW.
 - Nao usar menu interativo dentro de servico.
 - `--service` ainda existe no codigo antigo, mas a estrategia recomendada agora e WinSW.
 

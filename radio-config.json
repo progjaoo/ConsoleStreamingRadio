@@ -1,20 +1,20 @@
 {
   "Stream": {
-    "Url": "https://stm19.srvstm.com:7080/stream",
+    "Url": "http://192.168.70.4:8070/patosdeminas",
     "Links": [
       {
         "Name": "Principal",
-        "Url": "https://stm19.srvstm.com:7080/stream",
+        "Url": "http://192.168.70.4:8070/patosdeminas",
         "Enabled": true
       },
       {
         "Name": "Reserva 1",
-        "Url": "",
+        "Url": "https://svr.srvstm.com",
         "Enabled": false
       },
       {
         "Name": "Reserva 2",
-        "Url": "",
+        "Url": "https://stm19.srvstm.com:7080/stream",
         "Enabled": false
       }
     ],
@@ -39,6 +39,6 @@
     "Description": "Radio stream receiver service"
   },
   "Console": {
-    "LicensedTo": "KBUM 102,7 FM"
+    "LicensedTo": "GTF, Inc"
   }
 }

@@ -35,8 +35,8 @@ internal static class Program
                     token => player.RunAsync(token)).Run();
 
             case "--run":
-                AppLogger.ConsoleEnabled = true;
-                return await RunPlayerOnlyAsync(player);
+                AppLogger.ConsoleEnabled = HasInteractiveConsole();
+                return await RunPlayerOnlyAsync(player, AppLogger.ConsoleEnabled);
 
             case "--list-devices":
                 AppLogger.ConsoleEnabled = true;
@@ -99,19 +99,61 @@ internal static class Program
         return string.Equals(value, expected, StringComparison.OrdinalIgnoreCase);
     }
 
-    private static async Task<int> RunPlayerOnlyAsync(StreamPlayerService player)
+    private static async Task<int> RunPlayerOnlyAsync(StreamPlayerService player, bool interactiveConsole)
     {
         using var cts = new CancellationTokenSource();
-
-        Console.CancelKeyPress += (_, e) =>
+        EventHandler processExitHandler = (_, _) =>
         {
-            e.Cancel = true;
-            cts.Cancel();
+            try
+            {
+                cts.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+                // The process is already shutting down.
+            }
         };
 
-        Console.WriteLine("Executando player. Pressione CTRL+C para sair.");
-        await player.RunAsync(cts.Token);
-        return 0;
+        if (interactiveConsole)
+        {
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true;
+                cts.Cancel();
+            };
+
+            Console.WriteLine("Executando player. Pressione CTRL+C para sair.");
+        }
+
+        AppDomain.CurrentDomain.ProcessExit += processExitHandler;
+
+        try
+        {
+            await player.RunAsync(cts.Token);
+            return 0;
+        }
+        finally
+        {
+            AppDomain.CurrentDomain.ProcessExit -= processExitHandler;
+        }
+    }
+
+    private static bool HasInteractiveConsole()
+    {
+        if (!Environment.UserInteractive)
+        {
+            return false;
+        }
+
+        try
+        {
+            _ = Console.CursorLeft;
+            return !Console.IsOutputRedirected;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static void ListDevices(AudioDeviceService audioDevices)
@@ -142,16 +184,16 @@ internal static class Program
         Console.WriteLine("GTF RX Tlink - comandos disponiveis");
         Console.WriteLine();
         Console.WriteLine("  --console           Abre o menu administrativo e executa o player local");
-        Console.WriteLine("  --run               Executa apenas o player, sem menu");
-        Console.WriteLine("  --service           Entrada usada pelo Windows Service");
+        Console.WriteLine("  --run               Executa apenas o player, sem menu (usado pelo WinSW)");
+        Console.WriteLine("  --service           Entrada antiga usada pelo Windows Service via sc.exe");
         Console.WriteLine("  --list-devices      Lista placas de audio de saida");
         Console.WriteLine("  --open-config       Abre o arquivo de configuracao");
         Console.WriteLine("  --export-logs       Gera um arquivo TXT com os logs atuais");
-        Console.WriteLine("  --install-service   Instala o servico Windows");
-        Console.WriteLine("  --uninstall-service Remove o servico Windows");
-        Console.WriteLine("  --start-service     Inicia o servico Windows");
-        Console.WriteLine("  --stop-service      Para o servico Windows");
-        Console.WriteLine("  --restart-service   Reinicia o servico Windows");
-        Console.WriteLine("  --status-service    Mostra o status do servico Windows");
+        Console.WriteLine("  --install-service   Instala o servico Windows (WinSW se disponivel)");
+        Console.WriteLine("  --uninstall-service Remove o servico Windows (WinSW se disponivel)");
+        Console.WriteLine("  --start-service     Inicia o servico Windows (WinSW se disponivel)");
+        Console.WriteLine("  --stop-service      Para o servico Windows (WinSW se disponivel)");
+        Console.WriteLine("  --restart-service   Reinicia o servico Windows (WinSW se disponivel)");
+        Console.WriteLine("  --status-service    Mostra o status do servico Windows (WinSW se disponivel)");
     }
 }

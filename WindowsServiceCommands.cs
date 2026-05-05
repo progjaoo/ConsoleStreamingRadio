@@ -2,7 +2,84 @@ using System.Diagnostics;
 
 internal static class WindowsServiceCommands
 {
+    private const string WinSwExecutableName = "GTF-RX-Tlink-Service.exe";
+
     public static int Install(AppConfig config)
+    {
+        if (TryRunWinSw("install", out var exitCode))
+        {
+            return exitCode;
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando instalacao antiga via sc.exe.");
+        return InstallLegacy(config);
+    }
+
+    public static int Uninstall(AppConfig config)
+    {
+        if (TryRunWinSw("stop", out _))
+        {
+            return RunWinSw("uninstall");
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando remocao antiga via sc.exe.");
+        StopLegacy(config);
+        return RunSc("delete", config.Service.Name);
+    }
+
+    public static int Start(AppConfig config)
+    {
+        if (TryRunWinSw("start", out var exitCode))
+        {
+            return exitCode;
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando inicializacao antiga via sc.exe.");
+        return StartLegacy(config);
+    }
+
+    public static int Stop(AppConfig config)
+    {
+        if (TryRunWinSw("stop", out var exitCode))
+        {
+            return exitCode;
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando parada antiga via sc.exe.");
+        return StopLegacy(config);
+    }
+
+    public static int Restart(AppConfig config)
+    {
+        if (WinSwExists())
+        {
+            var stopExitCode = RunWinSw("stop");
+            return stopExitCode != 0 ? stopExitCode : RunWinSw("start");
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando reinicio antigo via sc.exe.");
+        if (!EnsureWindows())
+        {
+            return 1;
+        }
+
+        StopLegacy(config);
+        Thread.Sleep(TimeSpan.FromSeconds(2));
+        return StartLegacy(config);
+    }
+
+    public static int Status(AppConfig config)
+    {
+        if (TryRunWinSw("status", out var exitCode))
+        {
+            return exitCode;
+        }
+
+        Console.WriteLine("Wrapper WinSW nao encontrado na pasta do aplicativo. Usando consulta antiga via sc.exe.");
+        return EnsureWindows() ? RunSc("query", config.Service.Name) : 1;
+    }
+
+    private static int InstallLegacy(AppConfig config)
     {
         if (!EnsureWindows())
         {
@@ -26,42 +103,66 @@ internal static class WindowsServiceCommands
         return 0;
     }
 
-    public static int Uninstall(AppConfig config)
-    {
-        if (!EnsureWindows())
-        {
-            return 1;
-        }
-
-        Stop(config);
-        return RunSc("delete", config.Service.Name);
-    }
-
-    public static int Start(AppConfig config)
+    private static int StartLegacy(AppConfig config)
     {
         return EnsureWindows() ? RunSc("start", config.Service.Name) : 1;
     }
 
-    public static int Stop(AppConfig config)
+    private static int StopLegacy(AppConfig config)
     {
         return EnsureWindows() ? RunSc("stop", config.Service.Name) : 1;
     }
 
-    public static int Restart(AppConfig config)
+    private static bool WinSwExists()
+    {
+        return File.Exists(GetWinSwPath());
+    }
+
+    private static bool TryRunWinSw(string command, out int exitCode)
+    {
+        exitCode = 1;
+
+        if (!WinSwExists())
+        {
+            return false;
+        }
+
+        exitCode = RunWinSw(command);
+        return true;
+    }
+
+    private static int RunWinSw(string command)
     {
         if (!EnsureWindows())
         {
             return 1;
         }
 
-        Stop(config);
-        Thread.Sleep(TimeSpan.FromSeconds(2));
-        return Start(config);
+        var processStartInfo = new ProcessStartInfo(GetWinSwPath(), command)
+        {
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+            WorkingDirectory = AppContext.BaseDirectory
+        };
+
+        using var process = Process.Start(processStartInfo);
+
+        if (process is null)
+        {
+            Console.WriteLine("Nao foi possivel executar o wrapper WinSW.");
+            return 1;
+        }
+
+        process.WaitForExit();
+        WriteProcessOutput(process);
+        return process.ExitCode;
     }
 
-    public static int Status(AppConfig config)
+    private static string GetWinSwPath()
     {
-        return EnsureWindows() ? RunSc("query", config.Service.Name) : 1;
+        return Path.Combine(AppContext.BaseDirectory, WinSwExecutableName);
     }
 
     private static bool EnsureWindows()
@@ -99,7 +200,12 @@ internal static class WindowsServiceCommands
         }
 
         process.WaitForExit();
+        WriteProcessOutput(process);
+        return process.ExitCode;
+    }
 
+    private static void WriteProcessOutput(Process process)
+    {
         var output = process.StandardOutput.ReadToEnd();
         var error = process.StandardError.ReadToEnd();
 
@@ -112,7 +218,5 @@ internal static class WindowsServiceCommands
         {
             Console.WriteLine(error.Trim());
         }
-
-        return process.ExitCode;
     }
 }

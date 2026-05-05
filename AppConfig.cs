@@ -13,7 +13,7 @@ internal sealed class AppConfig
         {
             Stream = new StreamSettings
             {
-                Url = "https://stm19.srvstm.com:7080/stream",
+                Url = "http://192.168.70.4:8070/patosdeminas",
                 AutoPlay = true,
                 ReconnectEnabled = true,
                 ReconnectDelaySeconds = 5,
@@ -27,19 +27,19 @@ internal sealed class AppConfig
                     new TransmissionLinkSettings
                     {
                         Name = "Principal",
-                        Url = "https://stm19.srvstm.com:7080/stream",
+                        Url = "http://192.168.70.4:8070/patosdeminas",
                         Enabled = true
                     },
                     new TransmissionLinkSettings
                     {
                         Name = "Reserva 1",
-                        Url = string.Empty,
+                        Url = "https://svr.soundstream.com.br:8300/live",
                         Enabled = false
                     },
                     new TransmissionLinkSettings
                     {
                         Name = "Reserva 2",
-                        Url = string.Empty,
+                        Url = "https://stm19.srvstm.com:7080/stream",
                         Enabled = false
                     }
                 ]
@@ -59,7 +59,7 @@ internal sealed class AppConfig
             },
             Console = new ConsoleSettings
             {
-                LicensedTo = "KBUM 102,7 FM"
+                LicensedTo = "Grupo GTF"
             }
         };
     }

@@ -19,6 +19,10 @@ NAudio*.dll
 
 `GTF-RX-Tlink-Service.xml` deve ser uma copia do arquivo `winsw/GTF-RX-Tlink-Service.xml` deste repositorio.
 
+O projeto tambem copia esses arquivos automaticamente no build/publish:
+o XML entra como `GTF-RX-Tlink-Service.xml` e o executavel `WinSW.NET461.exe`
+do pacote NuGet e duplicado como `GTF-RX-Tlink-Service.exe`.
+
 ## Instalar
 
 Abra PowerShell como Administrador dentro da pasta publicada:

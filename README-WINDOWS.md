@@ -147,6 +147,10 @@ Comandos antigos de servico via `sc.exe`:
 ```
 
 Esses comandos antigos continuam no codigo, mas a recomendacao atual e usar WinSW.
+Quando o arquivo `GTF-RX-Tlink-Service.exe` estiver na mesma pasta do aplicativo,
+os comandos `--install-service`, `--start-service`, `--stop-service`,
+`--restart-service`, `--uninstall-service` e `--status-service` usam o WinSW.
+Se o wrapper nao existir, o sistema cai para o modo antigo via `sc.exe`.
 
 ## Publicar no Windows
 
@@ -192,9 +196,10 @@ GTF-RX-Tlink-Service.xml
 NAudio*.dll
 ```
 
-`GTF-RX-Tlink-Service.exe` e o WinSW renomeado.
+O publish copia automaticamente o XML e gera `GTF-RX-Tlink-Service.exe` a partir
+do executavel do pacote WinSW.
 
-`GTF-RX-Tlink-Service.xml` deve ser copiado de:
+`GTF-RX-Tlink-Service.xml` vem de:
 
 ```text
 winsw\GTF-RX-Tlink-Service.xml
@@ -269,7 +274,7 @@ Audio em Windows Service depende da conta usada pelo servico. Se o servico inici
 9. Configurar reservas no menu opcao 12.
 10. Ajustar buffer no menu opcao 14.
 11. Exportar logs no menu opcao 13 se precisar diagnosticar.
-12. Copiar WinSW renomeado e XML para a pasta publicada.
+12. Conferir se `GTF-RX-Tlink-Service.exe` e `GTF-RX-Tlink-Service.xml` foram publicados.
 13. Instalar e iniciar o servico com PowerShell Administrador.
 
 ## Validacoes feitas neste ambiente

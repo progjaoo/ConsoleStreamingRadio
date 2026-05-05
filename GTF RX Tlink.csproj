@@ -11,10 +11,30 @@
   <ItemGroup>
     <Content Include="icon.ico" />
     <Content Include="radio-config.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="winsw\GTF-RX-Tlink-Service.xml" Link="GTF-RX-Tlink-Service.xml" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="WinSW" Version="2.11.0" NoWarn="NU1701" />
   </ItemGroup>
+
+  <Target Name="CopyWinSwWrapperToOutput" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)WinSW.NET461.exe"
+          DestinationFiles="$(OutputPath)GTF-RX-Tlink-Service.exe"
+          Condition="Exists('$(OutputPath)WinSW.NET461.exe')"
+          SkipUnchangedFiles="true" />
+    <Delete Files="$(OutputPath)WinSW.NET461.exe"
+            Condition="Exists('$(OutputPath)GTF-RX-Tlink-Service.exe')" />
+  </Target>
+
+  <Target Name="CopyWinSwWrapperToPublish" AfterTargets="Publish">
+    <Copy SourceFiles="$(PublishDir)WinSW.NET461.exe"
+          DestinationFiles="$(PublishDir)GTF-RX-Tlink-Service.exe"
+          Condition="Exists('$(PublishDir)WinSW.NET461.exe')"
+          SkipUnchangedFiles="true" />
+    <Delete Files="$(PublishDir)WinSW.NET461.exe"
+            Condition="Exists('$(PublishDir)GTF-RX-Tlink-Service.exe')" />
+  </Target>
 
 </Project>

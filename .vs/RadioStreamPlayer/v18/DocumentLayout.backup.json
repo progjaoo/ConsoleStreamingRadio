@@ -1,14 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Projetos Visual Studio\\RadioStreamPlayer\\",
+  "WorkspaceRootPath": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|d:\\projetos visual studio\\radiostreamplayer\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|d:\\projetos visual studio\\radiostreamplayer\\gtf rx tlink.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:gtf rx tlink.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\applogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:applogger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\codex-handoff.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:codex-handoff.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\audiodeviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:audiodeviceservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\configservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:configservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\consolemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:consolemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\debouncedaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:debouncedaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\delegatedisposable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:delegatedisposable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|c:\\users\\88fm-pc-006\\desktop\\consolestreamingradio\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19BEB5B7-2E41-219A-CB63-CF81BB6CE8A4}|GTF RX Tlink.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +46,116 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "GTF RX Tlink",
-              "DocumentMoniker": "D:\\Projetos Visual Studio\\RadioStreamPlayer\\GTF RX Tlink.csproj",
-              "RelativeDocumentMoniker": "GTF RX Tlink.csproj",
-              "ToolTip": "D:\\Projetos Visual Studio\\RadioStreamPlayer\\GTF RX Tlink.csproj",
-              "RelativeToolTip": "GTF RX Tlink.csproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-03-28T15:07:10.363Z",
+              "DocumentIndex": 0,
+              "Title": "AppConfig.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AppConfig.cs",
+              "RelativeDocumentMoniker": "AppConfig.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AppConfig.cs",
+              "RelativeToolTip": "AppConfig.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAcwCcAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:40:25.847Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\Projetos Visual Studio\\RadioStreamPlayer\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\Projetos Visual Studio\\RadioStreamPlayer\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAWAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AppLogger.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AppLogger.cs",
+              "RelativeDocumentMoniker": "AppLogger.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AppLogger.cs",
+              "RelativeToolTip": "AppLogger.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-17T01:20:12.562Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-05T11:39:57.448Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CODEX-HANDOFF.md",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\CODEX-HANDOFF.md",
+              "RelativeDocumentMoniker": "CODEX-HANDOFF.md",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\CODEX-HANDOFF.md",
+              "RelativeToolTip": "CODEX-HANDOFF.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-05-05T11:39:53.605Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AudioDeviceService.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AudioDeviceService.cs",
+              "RelativeDocumentMoniker": "AudioDeviceService.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\AudioDeviceService.cs",
+              "RelativeToolTip": "AudioDeviceService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:36:45.42Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ConfigService.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\ConfigService.cs",
+              "RelativeDocumentMoniker": "ConfigService.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\ConfigService.cs",
+              "RelativeToolTip": "ConfigService.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:36:36.253Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ConsoleMenu.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\ConsoleMenu.cs",
+              "RelativeDocumentMoniker": "ConsoleMenu.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\ConsoleMenu.cs",
+              "RelativeToolTip": "ConsoleMenu.cs",
+              "ViewState": "AgIAAJ0BAAAAAAAAAADwv7kBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:35:06.744Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DebouncedAction.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\DebouncedAction.cs",
+              "RelativeDocumentMoniker": "DebouncedAction.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\DebouncedAction.cs",
+              "RelativeToolTip": "DebouncedAction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:34:37.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DelegateDisposable.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\DelegateDisposable.cs",
+              "RelativeDocumentMoniker": "DelegateDisposable.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\DelegateDisposable.cs",
+              "RelativeToolTip": "DelegateDisposable.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:34:33.41Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\88FM-PC-006\\Desktop\\ConsoleStreamingRadio\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAIwJ0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-05T11:34:19.379Z"
             }
           ]
         }
